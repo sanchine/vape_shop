@@ -1,0 +1,24 @@
+{
+  "short_name": "Chameleon",
+  "name": "Chameleon App",
+  "icons": [
+    {
+      "src": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fchameleonvapes%2F&psig=AOvVaw3j3YidN-juPX-xB8NAQosX&ust=1744551879706000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCk9K7Q0owDFQAAAAAdAAAAABAE",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fchameleonvapes%2F&psig=AOvVaw3j3YidN-juPX-xB8NAQosX&ust=1744551879706000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCk9K7Q0owDFQAAAAAdAAAAABAE",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fchameleonvapes%2F&psig=AOvVaw3j3YidN-juPX-xB8NAQosX&ust=1744551879706000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJCk9K7Q0owDFQAAAAAdAAAAABAE",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#000000"
+}
