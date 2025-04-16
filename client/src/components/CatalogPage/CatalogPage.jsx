@@ -114,52 +114,6 @@ export const CatalogPage = () => {
     // setIsShowAddForm()
   };
 
-  const DeviceListItem = React.memo(
-    ({ info, onDelete }) => {
-      const [isMouseOverItem, setIsMouseOverItem] = useState(false);
-
-      const handleDelete = () => {
-        onDelete(info.id);
-      };
-
-      return (
-        <div
-          onMouseEnter={() => setIsMouseOverItem(true)}
-          onMouseLeave={() => setIsMouseOverItem(false)}
-          class="col-sm-6 col-md-4 col-lg-3 mb-4"
-          key={info.id}
-        >
-          {isMouseOverItem ? (
-            <div>
-              <label onClick={handleDelete}>X</label>
-              <br></br>
-            </div>
-          ) : (
-            <div>
-              <br></br>
-            </div>
-          )}
-
-          <div class="card" onClick={() => setSelectedItem(info)}>
-            <img
-              style={{ width: "100%" }}
-              class="card-img-top"
-              alt={info.model}
-              src={info.image}
-            />{" "}
-            <div class="card-body">
-              <b>
-                <label class="card-title">{info.name}</label>
-              </b>
-              <p class="card-text">{info.price + " руб."}</p>
-            </div>
-          </div>
-        </div>
-      );
-    },
-    [devicesList]
-  );
-
   const devicesTypes = filterDevicesType(devicesData);
 
   if (selectedItem) {
@@ -220,19 +174,81 @@ export const CatalogPage = () => {
 
       {/* // TODO: <DevicesList /> */}
 
-      <div class="container-fluid bg-light">
-        {devicesList.length !== 0 ? (
+      <DevicesList
+        list={devicesList}
+        data={devicesData}
+        filter={{type: selectedDeviceType, name: nameFilter}}
+        handleDeleteItem={handleDeleteItem}
+        setSelectedItem={setSelectedItem}
+      />
+
+    </div>
+  );
+};
+
+const DevicesList = ({ data, list, filter, handleDeleteItem, setSelectedItem }) => {
+
+  const DeviceListItem = React.memo(
+    ({ info, onDelete }) => {
+      const [isMouseOverItem, setIsMouseOverItem] = useState(false);
+
+      const handleDelete = () => {
+        onDelete(info.id);
+      };
+
+      return (
+        <div
+          onMouseOver={() => setIsMouseOverItem(true)}
+          onMouseLeave={() => setIsMouseOverItem(false)}
+          class="col-sm-6 col-md-4 col-lg-3 mb-4"
+          key={info.id}
+        >
+          {isMouseOverItem ? (
+            <div>
+              <label onClick={handleDelete}>X</label>
+              <br></br>
+            </div>
+          ) : (
+            <div>
+              <br></br>
+            </div>
+          )}
+
+          <div class="card" onClick={() => setSelectedItem(info)}>
+            <img
+              style={{ width: "100%" }}
+              class="card-img-top"
+              alt={info.model}
+              src={info.image}
+            />{" "}
+            <div class="card-body">
+              <b>
+                <label class="card-title">{info.name}</label>
+              </b>
+              <p class="card-text">{info.price + " руб."}</p>
+            </div>
+          </div>
+        </div>
+      );
+    },
+    [list]
+  );
+
+
+  return (
+    <div class="container-fluid bg-light">
+        {list.length !== 0 ? (
           <div class="row">
-            {devicesList
+            {list
               .filter(
                 (d) =>
-                  d.type === selectedDeviceType || selectedDeviceType === ""
+                  d.type === filter.type || filter.type === ""
               )
               .map((d) => {
-                if (nameFilter !== "") {
+                if (filter.name !== "") {
                   return d.name
                     .toLowerCase()
-                    .includes(nameFilter.toLowerCase()) ? (
+                    .includes(filter.name.toLowerCase()) ? (
                     <DeviceListItem info={d} onDelete={handleDeleteItem} />
                   ) : null;
                 }
@@ -241,6 +257,5 @@ export const CatalogPage = () => {
           </div>
         ) : null}
       </div>
-    </div>
-  );
-};
+  )
+}
