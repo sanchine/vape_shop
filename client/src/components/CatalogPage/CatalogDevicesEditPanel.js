@@ -24,7 +24,7 @@ export const CatalogDevicesEditPanel = ({ onAddOne }) => {
 
       if (res) {
         console.log(res.statusText);
-        onAddOne(data);
+        onAddOne(res.data);
       }
     } catch (e) {
       console.log(e);

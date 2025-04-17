@@ -12,11 +12,16 @@ const addDevice = (req, res) => {
 
     db.pool.query(`
         INSERT INTO devices (name, type, price, description, image)
-        VALUES ($1, $2, $3, $4, $5);`,
-        [name, type, price, description, image]
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *;`,
+        [name, type, price, description, image],
+        (e, result) => {
+            if (e) throw e
+            res.status(200).json(result.rows[0])
+        }
     )
 
-    res.json({ result: 'ok' })
+    // res.status(200).json({ result: 'ok' })
 }
 
 const getAllDevices = (req, res) => {
