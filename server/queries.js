@@ -38,6 +38,8 @@ const getAllDevices = (req, res) => {
 const deleteOneDevice = (req, res) => {
     const id = req.body.id
 
+    // TODO: SQL-script constructor
+    // TODO: queryParam = { method: "DELETE", table: "devices", ... } -> "DELETE FROM devices WHERE ..."
     db.pool.query(`DELETE FROM devices WHERE id=${id}`, (e, result) => {
         if (!e) res.status(200).json({ result: 'ok' })
         else res.status(500).json({ error: e })

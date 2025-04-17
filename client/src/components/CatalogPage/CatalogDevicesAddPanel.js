@@ -1,8 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
-import { BACKEND_IP } from "../../apiConfig";
 
-export const CatalogDevicesEditPanel = ({ onAddOne }) => {
+
+export const CatalogDevicesAddPanel = ({ isShow, onAdd }) => {
   const [addFormData, setAddFormData] = useState({
     type: "",
     name: "",
@@ -11,25 +10,11 @@ export const CatalogDevicesEditPanel = ({ onAddOne }) => {
     image: "",
   });
 
-  const onSubmitHandler = async () => {
-    try {
-      const data = { ...addFormData };
-      console.log(data);
-      const res = await axios.post(`http://${BACKEND_IP}:3001/devices/add`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify({ data }),
-      });
+  const handleSubmit = () => {
+    onAdd({...addFormData})
+  }
 
-      if (res) {
-        console.log(res.statusText);
-        onAddOne(res.data);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  if (!isShow) return null
 
   return (
     <div class="col mt-3 bg-light">
@@ -110,7 +95,7 @@ export const CatalogDevicesEditPanel = ({ onAddOne }) => {
             class="form-control btn btn-outline-dark m-2"
             type="submit"
             value="Add"
-            onClick={onSubmitHandler}
+            onClick={handleSubmit}
           />
         </div>
       </div>

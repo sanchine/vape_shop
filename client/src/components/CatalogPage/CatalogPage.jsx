@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_IP } from "../../apiConfig";
 import { CatalogItemPage } from "./CatalogItemPage";
-import { CatalogDevicesEditPanel } from "./CatalogDevicesEditPanel";
+import { CatalogDevicesAddPanel } from "./CatalogDevicesAddPanel";
+import { CatalogDevicesFilterPanel } from "./CatalogDevicesFilterPanel";
+import { CatalogDevicesTypesPanel } from "./CatalogDevicesTypesPanel";
+import { CatalogDevicesList } from "./CatalogDevicesList";
 
 export const CatalogPage = () => {
   const [devicesData, setDevicesData] = useState([]);
@@ -114,7 +117,22 @@ export const CatalogPage = () => {
     // setIsShowAddForm()
   };
 
-  const devicesTypes = filterDevicesType(devicesData);
+  const sendItem = async (data) => {
+    try {
+      const res = await axios.post(`http://${BACKEND_IP}:3001/devices/add`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({ data }),
+      });
+
+      if (res) {
+        addOneToDevicesData(res.data);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   if (selectedItem) {
     return (
@@ -129,133 +147,33 @@ export const CatalogPage = () => {
 
   return (
     <div class="col p-3 container-fluid">
-      
+      <CatalogDevicesFilterPanel
+        name={nameFilter}
+        setName={setNameFilter}
+        setSortingType={setSortingType}
+        isShowAddForm={isShowAddForm}
+        setIsShowAddForm={setIsShowAddForm}
+      />
 
-      <div class="row p-2">
-        <input
-          class="form-control w-25 border-danger"
-          placeholder="Наименование"
-          value={nameFilter}
-          onChange={(e) => setNameFilter(e.target.value)}
-        />
-        <select
-          class="form-select w-25 border-warning"
-          placeholder="Сортировка"
-          onChange={(e) => setSortingType(e.target.value)}
-        >
-          <option value="default">По умолчанию</option>
-          <option value="from-low">Сначала дешевле</option>
-          <option value="from-high">Сначала дороже</option>
-        </select>
-        <button
-          class="form-control btn btn-outline-success w-25"
-          onClick={() => {
-            setIsShowAddForm((prev) => !prev);
-          }}
-        >
-          {isShowAddForm ? "X" : "Добавить товар"}
-        </button>
-      </div>
+      <CatalogDevicesAddPanel
+        onAdd={sendItem}
+        isShow={isShowAddForm}
+      />
 
-      {isShowAddForm ? (
-        <CatalogDevicesEditPanel onAddOne={addOneToDevicesData} />
-      ) : null}
+      <CatalogDevicesTypesPanel
+        types={filterDevicesType(devicesData)}
+        selectedType={selectedDeviceType}
+        onSelectType={onSelectDeviceTypeHandler}
+      />
 
-      <div class="d-flex justify-content-around mt-3 border">
-        {devicesTypes.map((d) => {
-          const labelString = d !== selectedDeviceType ? d : <b>{d}</b>;
-          return (
-            <label class="p-2" onClick={() => onSelectDeviceTypeHandler(d)}>
-              {labelString}
-            </label>
-          );
-        })}
-      </div>
-
-      {/* // TODO: <DevicesList /> */}
-
-      <DevicesList
+      <CatalogDevicesList
         list={devicesList}
-        data={devicesData}
-        filter={{type: selectedDeviceType, name: nameFilter}}
+        filter={{ type: selectedDeviceType, name: nameFilter }}
         handleDeleteItem={handleDeleteItem}
         setSelectedItem={setSelectedItem}
       />
-
     </div>
   );
 };
 
-const DevicesList = ({ data, list, filter, handleDeleteItem, setSelectedItem }) => {
 
-  const DeviceListItem = React.memo(
-    ({ info, onDelete }) => {
-      const [isMouseOverItem, setIsMouseOverItem] = useState(false);
-
-      const handleDelete = () => {
-        onDelete(info.id);
-      };
-
-      return (
-        <div
-          onMouseOver={() => setIsMouseOverItem(true)}
-          onMouseLeave={() => setIsMouseOverItem(false)}
-          class="col-sm-6 col-md-4 col-lg-3 mb-4"
-          key={info.id}
-        >
-          {isMouseOverItem ? (
-            <div>
-              <label onClick={handleDelete}>X</label>
-              <br></br>
-            </div>
-          ) : (
-            <div>
-              <br></br>
-            </div>
-          )}
-
-          <div class="card" onClick={() => setSelectedItem(info)}>
-            <img
-              style={{ width: "100%" }}
-              class="card-img-top"
-              alt={info.model}
-              src={info.image}
-            />{" "}
-            <div class="card-body">
-              <b>
-                <label class="card-title">{info.name}</label>
-              </b>
-              <p class="card-text">{info.price + " руб."}</p>
-            </div>
-          </div>
-        </div>
-      );
-    },
-    [list]
-  );
-
-
-  return (
-    <div class="container-fluid bg-light">
-        {list.length !== 0 ? (
-          <div class="row">
-            {list
-              .filter(
-                (d) =>
-                  d.type === filter.type || filter.type === ""
-              )
-              .map((d) => {
-                if (filter.name !== "") {
-                  return d.name
-                    .toLowerCase()
-                    .includes(filter.name.toLowerCase()) ? (
-                    <DeviceListItem info={d} onDelete={handleDeleteItem} />
-                  ) : null;
-                }
-                return <DeviceListItem info={d} onDelete={handleDeleteItem} />;
-              })}
-          </div>
-        ) : null}
-      </div>
-  )
-}
