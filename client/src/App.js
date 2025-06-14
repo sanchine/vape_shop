@@ -1,12 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { CatalogPage } from "./components/CatalogPage/CatalogPage";
 import { AdminPage } from "./components/AdminPage/AdminPage";
+import { AuthPage } from "./components/AuthPage/AuthPage";
+import axios from "axios";
+import { BACKEND_IP } from "./apiConfig";
 
 function App() {
+  const pages = ["Каталог", "О нас", "Контакты"]; //, 'Админка', 'VapeParser']
+
+  const [isAuth, setIsAuth] = useState(false)
   const [currentPage, setCurrentPage] = useState("Каталог");
 
-  const pages = ["Каталог", "О нас", "Контакты"]; //, 'Админка', 'VapeParser']
+  useEffect(() => {
+    const authUser = async () => {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) throw new Error("Token is undefined")
+        console.log(token)
+        setIsAuth(true)
+      } catch (e) {
+        return console.log("AUTH FAILED! ERROR: \n\n", e)
+      }
+    }
+
+    authUser()
+  }, [])
 
   const RenderPage = ({ page }) => {
     switch (page) {
@@ -20,6 +39,15 @@ function App() {
         break;
     }
   };
+
+  const handleAuth = (token) => {
+    localStorage.setItem('token', token)
+    setIsAuth(true)
+  }
+
+  // if (!isAuth) {
+  //   return <AuthPage onAuth={handleAuth} />
+  // }
 
   return (
     <div className="App">
@@ -62,6 +90,16 @@ function App() {
                     </li>
                   );
                 })}
+
+                <li
+                  class="nav-item"
+                  onClick={() => {
+                    localStorage.removeItem('token')
+                    setIsAuth(false)
+                  }}
+                >
+                  <a class="nav-link">Выход</a>
+                </li>
               </ul>
             </div>
           </div>

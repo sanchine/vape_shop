@@ -1,0 +1,5 @@
+Device.class
+ru/webserver/vapeshop/dtos/DevicesResponse.class
+ru/webserver/vapeshop/VapeshopApplication.class
+ru/webserver/vapeshop/models/Device.class
+ru/webserver/vapeshop/controllers/DeviceController.class

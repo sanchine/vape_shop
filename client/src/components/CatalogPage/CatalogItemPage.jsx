@@ -123,7 +123,7 @@ export const CatalogItemPage = ({
   const handleEditSubmit = () => {
     const callToEdit = async (payload) => {
       try {
-        const res = await axios.put(`http://${BACKEND_IP}:3001/devices`, {
+        const res = await axios.put(`${BACKEND_IP}/devices`, {
           headers: {
             "Content-Type": "application/json",
           },

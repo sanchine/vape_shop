@@ -8,6 +8,7 @@ import { CatalogDevicesTypesPanel } from "./CatalogDevicesTypesPanel";
 import { CatalogDevicesList } from "./CatalogDevicesList";
 
 export const CatalogPage = () => {
+
   const [devicesData, setDevicesData] = useState([]);
   const [devicesList, setDevicesList] = useState([]);
   const [nameFilter, setNameFilter] = useState("");
@@ -19,11 +20,22 @@ export const CatalogPage = () => {
   useEffect(() => {
     const fetchDevices = async () => {
       try {
-        const res = await axios.get(`http://${BACKEND_IP}:3001/devices`);
-        if (res) {
-          setDevicesData(res.data);
-          // setDevicesList(devicesData)
+        // const token = localStorage.getItem('token')
+        // if (!token) throw new Error("Token is undefined")
+
+        const res = await axios(BACKEND_IP + "/devices", {
+            method: "GET",
+            // headers: {
+              // 'Authorization': `Bearer ${token}` 
+            // }
+          }
+        )
+        if (!res) {
+          throw new Error("Response is null")
         }
+
+        setDevicesData(res.data);
+
       } catch (e) {
         console.log(e);
       }
@@ -51,11 +63,11 @@ export const CatalogPage = () => {
     };
 
     sortDataByType(sortingType);
-    console.log(devicesList[0]);
   }, [devicesData, sortingType]);
 
   const deleteOneFromDevicesData = (id) => {
     setDevicesData((prev) => [...prev.filter((d) => d.id !== id)]);
+    setSelectedDeviceType("")
   };
 
   const editOneFromDevicesData = (payload) => {
@@ -97,6 +109,7 @@ export const CatalogPage = () => {
   };
 
   const filterDevicesType = (src) => {
+
     const dest = [];
     src.map((el) => {
       if (dest.indexOf(el.type) !== -1) return;
@@ -113,13 +126,9 @@ export const CatalogPage = () => {
     setSelectedDeviceType(deviceType === selectedDeviceType ? "" : deviceType);
   };
 
-  const onClickAddForm = () => {
-    // setIsShowAddForm()
-  };
-
   const sendItem = async (data) => {
     try {
-      const res = await axios.post(`http://${BACKEND_IP}:3001/devices/add`, {
+      const res = await axios.post(`${BACKEND_IP}` + `/devices/add`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -155,7 +164,8 @@ export const CatalogPage = () => {
         setIsShowAddForm={setIsShowAddForm}
       />
 
-      <CatalogDevicesAddPanel
+      <CatalogDevicesAddPanel // CatalogDevicesAddItemPanel
+        types={filterDevicesType(devicesData)}
         onAdd={sendItem}
         isShow={isShowAddForm}
       />

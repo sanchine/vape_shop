@@ -6,7 +6,7 @@ export const CatalogDevicesList = ({
   handleDeleteItem,
   setSelectedItem,
 }) => {
-  const DeviceListItem = React.memo(
+  const DevicesListItem = React.memo(
     ({ info, onDelete, onSetSelectedItem }) => {
       const [isMouseOverItem, setIsMouseOverItem] = useState(false);
 
@@ -55,15 +55,20 @@ export const CatalogDevicesList = ({
       <div class="row">
         {list
           .filter((d) =>
-            d.name.toLowerCase().includes(filter.name.toLowerCase())
+            d.name.toLowerCase().includes(filter.name.toLowerCase()) && filter.name === ""
           )
-          .map((d) => (
-            <DeviceListItem
+          .map((d) => {
+            if (filter.type !== "" && filter.type !== d.type) return
+            
+            return (
+              <DevicesListItem
               onSetSelectedItem={setSelectedItem}
               info={d}
               onDelete={handleDeleteItem}
             />
-          ))}
+            )
+          
+        })}
       </div>
     </div>
   );

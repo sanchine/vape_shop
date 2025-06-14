@@ -1,0 +1,14 @@
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/VapeshopApplication.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/configs/SecurityConfig.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/controllers/AuthController.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/controllers/DeviceController.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/dtos/AuthResponse.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/dtos/DeviceDTO.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/dtos/DevicesResponse.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/dtos/LoginRequest.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/entities/Device.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/models/Device.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/repository/DeviceRepository.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/services/AuthService.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/services/DeviceService.java
+/home/psyhack/src/vape_shop/java_server/src/main/java/ru/webserver/vapeshop/utils/JwtUtil.java

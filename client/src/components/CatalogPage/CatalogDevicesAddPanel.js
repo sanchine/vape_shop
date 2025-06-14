@@ -1,9 +1,9 @@
 import { useState } from "react";
 
 
-export const CatalogDevicesAddPanel = ({ isShow, onAdd }) => {
+export const CatalogDevicesAddPanel = ({ isShow, onAdd, types }) => {
   const [addFormData, setAddFormData] = useState({
-    type: "",
+    type: types[0],
     name: "",
     price: "",
     description: "",
@@ -11,10 +11,12 @@ export const CatalogDevicesAddPanel = ({ isShow, onAdd }) => {
   });
 
   const handleSubmit = () => {
-    onAdd({...addFormData})
+    onAdd(addFormData)
   }
 
   if (!isShow) return null
+
+  console.log(types)
 
   return (
     <div class="col mt-3 bg-light">
@@ -22,7 +24,7 @@ export const CatalogDevicesAddPanel = ({ isShow, onAdd }) => {
         <h4>Добавление товара</h4>
 
         <div class="col">
-          <input
+          {/* <input
             class="form-control m-1"
             id="type"
             name="type"
@@ -31,7 +33,13 @@ export const CatalogDevicesAddPanel = ({ isShow, onAdd }) => {
             onChange={(event) => {
               setAddFormData((prev) => ({ ...prev, type: event.target.value }));
             }}
-          />
+          /> */}
+          {!types ? null : (
+            <select name="type" id="type" defaultValue={types[0]} value={addFormData["type"]} onChange={(event) => setAddFormData(prev => ({ ...prev, type: event.target.value}))} class="form-control m-1" defaultValue={types[0]}>
+              {types.map(type => <option value={type}>{type}</option>)}
+            </select>
+          )}
+          
           <input
             class="form-control m-1"
             id="image"
